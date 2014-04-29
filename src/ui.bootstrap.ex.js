@@ -1,4 +1,4 @@
-angular.module('ui.bootstrap.ex', ['ui.bootstrap.tpls', 'ui.bootstrap.modal'])
+angular.module('ui.bootstrap.ex', ['ui.bootstrap.modal'])
     .directive('ngClickConfirm', ['$modal', ngClickConfirmDirectiveFactory]);
 
 function ngClickConfirmDirectiveFactory($modal) {
