@@ -1,5 +1,6 @@
 angular.module('ui.bootstrap.ex', ['ui.bootstrap.modal'])
-    .directive('ngClickConfirm', ['$modal', ngClickConfirmDirectiveFactory]);
+    .directive('ngClickConfirm', ['$modal', ngClickConfirmDirectiveFactory])
+    .directive('uiModal', ['$modal', uiModalDirectiveFactory]);
 
 function ngClickConfirmDirectiveFactory($modal) {
     return {
@@ -35,4 +36,18 @@ function ModalInstanceCtrl($scope, $modalInstance) {
     $scope.no = function () {
         $modalInstance.dismiss('cancel');
     };
+}
+
+function uiModalDirectiveFactory($modal) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            element.bind('click', function() {
+                $modal.open({
+                    templateUrl: attrs.uiModal,
+                    scope: scope
+                });
+            });
+        }
+    }
 }

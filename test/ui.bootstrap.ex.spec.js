@@ -1,12 +1,23 @@
 describe('ui.bootstrap.ex', function () {
+    var modal, scope, element, event, click;
+
     beforeEach(module('ui.bootstrap.ex'));
 
+    beforeEach(inject(function($rootScope) {
+        scope = $rootScope.$new();
+        modal = jasmine.createSpyObj('modal', ['open']);
+        element = {
+            bind: function (evt, callback) {
+                event = evt;
+                click = callback;
+            }
+        };
+    }));
+
     describe('ngClickConfirm directive', function () {
-        var directive, scope, element, clickExecuted, attrs, modal, modalInstance;
+        var directive, clickExecuted, attrs, modalInstance;
 
         beforeEach(inject(function($rootScope) {
-            scope = $rootScope.$new();
-            modal = jasmine.createSpyObj('modal', ['open']);
             directive = ngClickConfirmDirectiveFactory(modal);
         }));
 
@@ -15,8 +26,6 @@ describe('ui.bootstrap.ex', function () {
         });
 
         describe('on link', function () {
-            var event, click;
-
             beforeEach(function () {
                 clickExecuted = false;
                 attrs = {
@@ -24,13 +33,6 @@ describe('ui.bootstrap.ex', function () {
                         clickExecuted = true;
                     }
                 };
-                element = {
-                    bind: function (evt, callback) {
-                        event = evt;
-                        click = callback;
-                    }
-                };
-
                 directive.link(scope, element, attrs);
             });
 
@@ -123,6 +125,45 @@ describe('ui.bootstrap.ex', function () {
                 scope.no();
 
                 expect(dismissReason).toEqual('cancel');
+            });
+        });
+    });
+
+    describe('uiModal directive', function () {
+        var directive, attrs;
+
+        beforeEach(function() {
+            directive = uiModalDirectiveFactory(modal);
+        });
+
+        it('restrict to attribute', function () {
+            expect(directive.restrict).toEqual('A');
+        });
+
+        describe('on link', function () {
+            beforeEach(function () {
+                attrs = {
+                    uiModal: 'template url'
+                };
+                directive.link(scope, element, attrs);
+            });
+
+            describe('when click event is triggered', function () {
+                beforeEach(function () {
+                    click();
+                });
+
+                it('modal is opened', function () {
+                    expect(modal.open).toHaveBeenCalled();
+                });
+
+                it('modal is opened with templateUrl setting', function () {
+                    expect(modal.open.mostRecentCall.args[0].templateUrl).toEqual('template url');
+                });
+
+                it('modal is opened with scope setting', function () {
+                    expect(modal.open.mostRecentCall.args[0].scope).toEqual(scope);
+                });
             });
         });
     });
