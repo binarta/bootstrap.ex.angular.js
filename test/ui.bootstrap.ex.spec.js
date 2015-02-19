@@ -54,7 +54,7 @@ describe('ui.bootstrap.ex', function () {
                 });
 
                 it('modal is opened with controller setting', function () {
-                    expect(modal.open.mostRecentCall.args[0].controller).toEqual(ModalInstanceCtrl);
+                    expect(modal.open.mostRecentCall.args[0].controller).toEqual('ngClickConfirmModalController');
                 });
 
                 describe('modal is opened with template setting', function () {
@@ -111,7 +111,7 @@ describe('ui.bootstrap.ex', function () {
                 scope.onSuccess = function () {
                     onSuccessExecuted = true;
                 };
-                modalInstanceCtrl = new ModalInstanceCtrl(scope, modalInstance);
+                modalInstanceCtrl = new ngClickConfirmModalController(scope, modalInstance);
             });
 
             it('yes action', function () {

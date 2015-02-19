@@ -1,4 +1,5 @@
 angular.module('ui.bootstrap.ex', ['ui.bootstrap.modal'])
+    .controller('ngClickConfirmModalController', ['$scope', '$modalInstance', ngClickConfirmModalController])
     .directive('ngClickConfirm', ['$modal', ngClickConfirmDirectiveFactory])
     .directive('uiModal', ['$modal', uiModalDirectiveFactory]);
 
@@ -19,7 +20,7 @@ function ngClickConfirmDirectiveFactory($modal) {
                         '<button class="btn btn-danger" ng-click="yes()">Yes</button>' +
                         '<button class="btn btn-success" ng-click="no()">No</button>' +
                         '</div>',
-                    controller: ModalInstanceCtrl,
+                    controller: 'ngClickConfirmModalController',
                     scope: scope
                 });
             });
@@ -27,7 +28,7 @@ function ngClickConfirmDirectiveFactory($modal) {
     }
 }
 
-function ModalInstanceCtrl($scope, $modalInstance) {
+function ngClickConfirmModalController($scope, $modalInstance) {
     $scope.yes = function () {
         $modalInstance.close();
         $scope.onSuccess();
