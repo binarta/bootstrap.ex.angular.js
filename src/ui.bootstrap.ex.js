@@ -1,4 +1,4 @@
-angular.module('ui.bootstrap.ex', ['ui.bootstrap.modal'])
+angular.module('ui.bootstrap.ex', ['ui.bootstrap'])
     .controller('ngClickConfirmModalController', ['$scope', '$modalInstance', ngClickConfirmModalController])
     .directive('ngClickConfirm', ['$modal', ngClickConfirmDirectiveFactory])
     .directive('uiModal', ['$modal', uiModalDirectiveFactory]);
