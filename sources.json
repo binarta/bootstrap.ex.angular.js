@@ -1,0 +1,6 @@
+{
+  "default": {
+    "ui.bootstrap.ex": "bower_components/binarta.ui.bootstrap.ex.angular/src/ui.bootstrap.ex.js",
+    "ui-bootstrap-tpls.min": "bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"
+  }
+}

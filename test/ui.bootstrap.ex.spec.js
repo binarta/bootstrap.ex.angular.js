@@ -50,11 +50,11 @@ describe('ui.bootstrap.ex', function () {
                 });
 
                 it('modal is opened with scope setting', function () {
-                    expect(modal.open.mostRecentCall.args[0].scope).toEqual(scope);
+                    expect(modal.open.calls.mostRecent().args[0].scope).toEqual(scope);
                 });
 
                 it('modal is opened with controller setting', function () {
-                    expect(modal.open.mostRecentCall.args[0].controller).toEqual('ngClickConfirmModalController');
+                    expect(modal.open.calls.mostRecent().args[0].controller).toEqual('ngClickConfirmModalController');
                 });
 
                 describe('modal is opened with template setting', function () {
@@ -71,7 +71,7 @@ describe('ui.bootstrap.ex', function () {
                     });
 
                     it('with default message', function () {
-                        expect(modal.open.mostRecentCall.args[0].template).toEqual(template('Are you sure?'));
+                        expect(modal.open.calls.mostRecent().args[0].template).toEqual(template('Are you sure?'));
                     });
 
                     it('with overridden message', function () {
@@ -80,7 +80,7 @@ describe('ui.bootstrap.ex', function () {
                         directive.link(scope, element, attrs);
                         click();
 
-                        expect(modal.open.mostRecentCall.args[0].template).toEqual(template('overridden'));
+                        expect(modal.open.calls.mostRecent().args[0].template).toEqual(template('overridden'));
                     });
                 });
             });
@@ -158,11 +158,11 @@ describe('ui.bootstrap.ex', function () {
                 });
 
                 it('modal is opened with templateUrl setting', function () {
-                    expect(modal.open.mostRecentCall.args[0].templateUrl).toEqual('template url');
+                    expect(modal.open.calls.mostRecent().args[0].templateUrl).toEqual('template url');
                 });
 
                 it('modal is opened with scope setting', function () {
-                    expect(modal.open.mostRecentCall.args[0].scope).toEqual(scope);
+                    expect(modal.open.calls.mostRecent().args[0].scope).toEqual(scope);
                 });
             });
         });
