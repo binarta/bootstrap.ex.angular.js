@@ -1,168 +1,152 @@
 describe('ui.bootstrap.ex', function () {
-    var modal, scope, element, event, click;
-
     beforeEach(module('ui.bootstrap.ex'));
 
-    beforeEach(inject(function($rootScope) {
-        scope = $rootScope.$new();
-        modal = jasmine.createSpyObj('modal', ['open']);
-        element = {
-            bind: function (evt, callback) {
-                event = evt;
-                click = callback;
-            }
-        };
-    }));
+    describe('binModal service', function () {
+        var body, sut, scope, element;
 
-    describe('ngClickConfirm directive', function () {
-        var directive, clickExecuted, attrs, modalInstance;
-
-        beforeEach(inject(function($rootScope) {
-            directive = ngClickConfirmDirectiveFactory(modal);
+        beforeEach(inject(function ($document, binModal, $templateCache) {
+            body = $document.find('body');
+            sut = binModal;
+            $templateCache.put('test.html', '<div id="test"></div>')
         }));
 
-        it('restrict to attribute', function () {
-            expect(directive.restrict).toEqual('A');
-        });
+        describe('on open modal', function () {
+            var testSpy;
 
-        describe('on link', function () {
             beforeEach(function () {
-                clickExecuted = false;
-                attrs = {
-                    ngClickConfirm: function () {
-                        clickExecuted = true;
+                testSpy = false;
+                sut.open({
+                    templateUrl: 'test.html',
+                    $ctrl: {
+                        test: function () {
+                            testSpy = true;
+                        }
                     }
-                };
-                directive.link(scope, element, attrs);
+                });
+                element = angular.element(document.getElementById('test'));
+                scope = element.scope();
             });
 
-            it('binds to click event', function () {
-                expect(event).toEqual('click');
+            afterEach(function () {
+                element.remove();
             });
 
-            describe('when click event is triggered', function () {
+            it('template is appended to body', function () {
+                expect(body.html()).toContain('id="test"');
+            });
+
+            it('on execute test spy', function () {
+                scope.$ctrl.test();
+                expect(testSpy).toBeTruthy();
+            });
+
+            describe('on close', function () {
+                var isScopeDestroyed;
+
                 beforeEach(function () {
-                    click();
+                    scope.$on('$destroy', function () {
+                        isScopeDestroyed = true;
+                    });
+                    sut.close();
                 });
 
-                it('modal is opened', function () {
-                    expect(modal.open).toHaveBeenCalled();
+                it('element is removed from body', function () {
+                    expect(body.html()).not.toContain('id="test"');
                 });
 
-                it('modal is opened with scope setting', function () {
-                    expect(modal.open.calls.mostRecent().args[0].scope).toEqual(scope);
+                it('scope is destroyed', function () {
+                    expect(isScopeDestroyed).toBeTruthy();
                 });
+            });
 
-                it('modal is opened with controller setting', function () {
-                    expect(modal.open.calls.mostRecent().args[0].controller).toEqual('ngClickConfirmModalController');
-                });
+            describe('on open before previous was closed', function () {
+                var isScopeDestroyed;
 
-                describe('modal is opened with template setting', function () {
-                    var template;
-
-                    beforeEach(function () {
-                        template = function (message) {
-                            return '<div class="modal-body"><h4>' + message + '</h4></div>' +
-                            '<div class="modal-footer">' +
-                            '<button class="btn btn-danger" ng-click="yes()">Yes</button>' +
-                            '<button class="btn btn-success" ng-click="no()">No</button>' +
-                            '</div>';
+                beforeEach(function () {
+                    scope.$on('$destroy', function () {
+                        isScopeDestroyed = true;
+                    });
+                    sut.open({
+                        templateUrl: 'test.html',
+                        $ctrl: {
+                            test: function () {
+                                testSpy = true;
+                            }
                         }
                     });
-
-                    it('with default message', function () {
-                        expect(modal.open.calls.mostRecent().args[0].template).toEqual(template('Are you sure?'));
-                    });
-
-                    it('with overridden message', function () {
-                        attrs.confirmMessage = 'overridden';
-
-                        directive.link(scope, element, attrs);
-                        click();
-
-                        expect(modal.open.calls.mostRecent().args[0].template).toEqual(template('overridden'));
-                    });
-                });
-            });
-
-            describe('when onSuccess is triggered', function () {
-                beforeEach(function () {
-                    scope.onSuccess();
+                    element = angular.element(document.getElementById('test'));
                 });
 
-                it('confirmed click action is executed', function () {
-                    expect(clickExecuted).toEqual(true);
+                afterEach(function () {
+                    element.remove();
+                });
+
+                it('previous element is removed', function () {
+                    expect(body.html().match(/id="test"/g).length).toEqual(1);
+                });
+
+                it('previous scope is destroyed', function () {
+                    expect(isScopeDestroyed).toBeTruthy();
                 });
             });
         });
 
-        describe('modalInstanceCtrl', function () {
-            var modalInstanceCtrl, closeExecuted, onSuccessExecuted, dismissReason;
+        describe('when bootstrap modal is available', function () {
+            var modalSpy;
 
             beforeEach(function () {
-                modalInstance = {
-                    close: function () {
-                        closeExecuted = true;
-                    },
-                    dismiss: function (reason) {
-                        dismissReason = reason
-                    }
-                };
-                scope.onSuccess = function () {
-                    onSuccessExecuted = true;
-                };
-                modalInstanceCtrl = new ngClickConfirmModalController(scope, modalInstance);
+                modalSpy = jasmine.createSpy('modal');
+                Object.prototype.modal = modalSpy;
+                sut.open({
+                    templateUrl: 'test.html',
+                    $ctrl: {}
+                });
+                element = angular.element(document.getElementById('test'));
+                scope = element.scope();
             });
 
-            it('yes action', function () {
-                scope.yes();
-
-                expect(closeExecuted).toEqual(true);
-                expect(onSuccessExecuted).toEqual(true);
+            afterEach(function () {
+                element.remove();
             });
 
-            it('no action', function () {
-                scope.no();
-
-                expect(dismissReason).toEqual('cancel');
-            });
-        });
-    });
-
-    describe('uiModal directive', function () {
-        var directive, attrs;
-
-        beforeEach(function() {
-            directive = uiModalDirectiveFactory(modal);
-        });
-
-        it('restrict to attribute', function () {
-            expect(directive.restrict).toEqual('A');
-        });
-
-        describe('on link', function () {
-            beforeEach(function () {
-                attrs = {
-                    uiModal: 'template url'
-                };
-                directive.link(scope, element, attrs);
+            it('element is on body', function () {
+                expect(body.html().match(/id="test"/g).length).toEqual(1);
             });
 
-            describe('when click event is triggered', function () {
+            it('modal is opened', function () {
+                expect(modalSpy).toHaveBeenCalledWith('show');
+            });
+
+            describe('on close', function () {
                 beforeEach(function () {
-                    click();
+                    sut.close();
                 });
 
-                it('modal is opened', function () {
-                    expect(modal.open).toHaveBeenCalled();
+                it('hide the modal', function () {
+                    expect(modalSpy).toHaveBeenCalledWith('hide');
                 });
 
-                it('modal is opened with templateUrl setting', function () {
-                    expect(modal.open.calls.mostRecent().args[0].templateUrl).toEqual('template url');
+                it('element is not yet removed', function () {
+                    expect(body.html().match(/id="test"/g).length).toEqual(1);
                 });
 
-                it('modal is opened with scope setting', function () {
-                    expect(modal.open.calls.mostRecent().args[0].scope).toEqual(scope);
+                describe('on hidden.bs.modal event', function () {
+                    var isScopeDestroyed;
+
+                    beforeEach(function () {
+                        scope.$on('$destroy', function () {
+                            isScopeDestroyed = true;
+                        });
+                        element[0].dispatchEvent(new Event('hidden.bs.modal'));
+                    });
+
+                    it('element is removed from body', function () {
+                        expect(body.html()).not.toContain('id="test"');
+                    });
+
+                    it('scope is destroyed', function () {
+                        expect(isScopeDestroyed).toBeTruthy();
+                    });
                 });
             });
         });

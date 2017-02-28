@@ -1,54 +1,32 @@
-angular.module('ui.bootstrap.ex', ['ui.bootstrap'])
-    .controller('ngClickConfirmModalController', ['$scope', '$modalInstance', ngClickConfirmModalController])
-    .directive('ngClickConfirm', ['$modal', ngClickConfirmDirectiveFactory])
-    .directive('uiModal', ['$modal', uiModalDirectiveFactory]);
+(function () {
+    angular.module('ui.bootstrap.ex', ['ui.bootstrap.templates'])
+        .service('binModal', ['$rootScope', '$document', '$compile', '$templateCache', binModalService]);
 
-function ngClickConfirmDirectiveFactory($modal) {
-    return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-            scope.onSuccess = function () {
-                return scope.$eval(attrs.ngClickConfirm);
-            };
+    function binModalService($rootScope, $document, $compile, $templateCache) {
+        var scope, element;
 
-            var message = attrs.confirmMessage || 'Are you sure?';
+        this.open = function (args) {
+            removeElement();
+            scope = $rootScope.$new();
+            scope.$ctrl = angular.copy(args.$ctrl);
+            element = $compile($templateCache.get(args.templateUrl))(scope);
+            $document.find('body').append(element);
 
-            element.bind('click', function() {
-                $modal.open({
-                    template: '<div class="modal-body"><h4>' + message + '</h4></div>' +
-                        '<div class="modal-footer">' +
-                        '<button class="btn btn-danger" ng-click="yes()">Yes</button>' +
-                        '<button class="btn btn-success" ng-click="no()">No</button>' +
-                        '</div>',
-                    controller: 'ngClickConfirmModalController',
-                    scope: scope
-                });
-            });
+            if (element.modal) {
+                element.modal('show');
+                element.on('hidden.bs.modal', removeElement);
+            }
+        };
+
+        this.close = function () {
+            element.modal ? element.modal('hide') : removeElement();
+        };
+
+        function removeElement() {
+            if (scope && scope.$destroy) scope.$destroy();
+            if (element && element.remove) element.remove();
+            scope = undefined;
+            element = undefined;
         }
     }
-}
-
-function ngClickConfirmModalController($scope, $modalInstance) {
-    $scope.yes = function () {
-        $modalInstance.close();
-        $scope.onSuccess();
-    };
-
-    $scope.no = function () {
-        $modalInstance.dismiss('cancel');
-    };
-}
-
-function uiModalDirectiveFactory($modal) {
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
-            element.bind('click', function() {
-                $modal.open({
-                    templateUrl: attrs.uiModal,
-                    scope: scope
-                });
-            });
-        }
-    }
-}
+})();

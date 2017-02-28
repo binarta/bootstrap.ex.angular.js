@@ -1,12 +1,11 @@
 {
   "name": "binarta.ui.bootstrap.ex.angular",
   "main": [
-    "./src/ui.bootstrap.ex.js",
-    "./sources.json"
+    "./src/ui.bootstrap.ex.js"
   ],
   "dependencies": {
     "binarta.angularx": "0.*.*",
-    "angular-bootstrap": "0.12.1"
+    "bootstrap": "3.3.*"
   },
   "devDependencies": {
     "angular-mocks": "1.*.*"
