@@ -1,6 +1,6 @@
-# ui.bootstrap.ex.angular.js
+# bootstrap.ex.angular.js
 
-[UI Bootstrap](http://angular-ui.github.io/bootstrap/) extensions.
+[Bootstrap](http://getbootstrap.com/) extensions for Angular.
 
 ## Copyright and license
 

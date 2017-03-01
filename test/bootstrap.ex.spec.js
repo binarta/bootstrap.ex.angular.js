@@ -1,5 +1,5 @@
-describe('ui.bootstrap.ex', function () {
-    beforeEach(module('ui.bootstrap.ex'));
+describe('bootstrap.ex', function () {
+    beforeEach(module('bootstrap.ex'));
 
     describe('binModal service', function () {
         var body, sut, scope, element;

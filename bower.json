@@ -1,7 +1,7 @@
 {
-  "name": "binarta.ui.bootstrap.ex.angular",
+  "name": "binarta.bootstrap.ex.angular",
   "main": [
-    "./src/ui.bootstrap.ex.js"
+    "./src/bootstrap.ex.js"
   ],
   "dependencies": {
     "bootstrap": "3.3.*"
