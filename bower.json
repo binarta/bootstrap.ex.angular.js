@@ -4,7 +4,6 @@
     "./src/ui.bootstrap.ex.js"
   ],
   "dependencies": {
-    "binarta.angularx": "0.*.*",
     "bootstrap": "3.3.*"
   },
   "devDependencies": {

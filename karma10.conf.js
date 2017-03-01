@@ -5,7 +5,6 @@ module.exports = function(config) {
         files:[
             {pattern:'bower_components/angular/angular.js'},
             {pattern:'bower_components/angular-mocks/angular-mocks.js'},
-            {pattern:'bower_components/angular-bootstrap/ui-bootstrap-tpls.js'},
             {pattern:'src/**/*.js'},
             {pattern:'test/**/*.js'}
         ],

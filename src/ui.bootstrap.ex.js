@@ -1,5 +1,5 @@
 (function () {
-    angular.module('ui.bootstrap.ex', ['ui.bootstrap.templates'])
+    angular.module('ui.bootstrap.ex', [])
         .service('binModal', ['$rootScope', '$document', '$compile', '$templateCache', binModalService]);
 
     function binModalService($rootScope, $document, $compile, $templateCache) {
