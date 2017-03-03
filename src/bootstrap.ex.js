@@ -8,7 +8,7 @@
         this.open = function (args) {
             removeElement();
             scope = $rootScope.$new();
-            scope.$ctrl = angular.copy(args.$ctrl);
+            scope.$ctrl = args.$ctrl;
             element = $compile($templateCache.get(args.templateUrl))(scope);
             $document.find('body').append(element);
 

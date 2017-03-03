@@ -11,17 +11,18 @@ describe('bootstrap.ex', function () {
         }));
 
         describe('on open modal', function () {
-            var testSpy;
+            var testSpy, modalCtrl;
 
             beforeEach(function () {
                 testSpy = false;
+                modalCtrl = {
+                    test: function () {
+                        testSpy = true;
+                    }
+                };
                 sut.open({
                     templateUrl: 'test.html',
-                    $ctrl: {
-                        test: function () {
-                            testSpy = true;
-                        }
-                    }
+                    $ctrl: modalCtrl
                 });
                 element = angular.element(document.getElementById('test'));
                 scope = element.scope();
@@ -38,6 +39,10 @@ describe('bootstrap.ex', function () {
             it('on execute test spy', function () {
                 scope.$ctrl.test();
                 expect(testSpy).toBeTruthy();
+            });
+
+            it('modal ctrl object can be modified from outside', function () {
+                expect(scope.$ctrl).toBe(modalCtrl);
             });
 
             describe('on close', function () {
