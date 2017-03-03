@@ -2,12 +2,11 @@ describe('bootstrap.ex', function () {
     beforeEach(module('bootstrap.ex'));
 
     describe('binModal service', function () {
-        var body, sut, scope, element, $timeout;
+        var body, sut, scope, element;
 
-        beforeEach(inject(function ($document, binModal, $templateCache, _$timeout_) {
+        beforeEach(inject(function ($document, binModal, $templateCache) {
             body = $document.find('body');
             sut = binModal;
-            $timeout = _$timeout_;
             $templateCache.put('test.html', '<div id="test"></div>')
         }));
 
@@ -99,26 +98,6 @@ describe('bootstrap.ex', function () {
                     expect(isScopeDestroyed).toBeTruthy();
                 });
             });
-
-            describe('on open with onClose handler', function () {
-                var onCloseSpy;
-
-                beforeEach(function () {
-                    onCloseSpy = jasmine.createSpy('close');
-
-                    sut.open({
-                        templateUrl: 'test.html',
-                        onClose: onCloseSpy
-                    });
-                    element = angular.element(document.getElementById('test'));
-                    scope = element.scope();
-                });
-
-                it('on close, close handler is executed', function () {
-                    sut.close();
-                    expect(onCloseSpy).toHaveBeenCalled();
-                });
-            });
         });
 
         describe('when bootstrap modal is available', function () {
@@ -146,7 +125,7 @@ describe('bootstrap.ex', function () {
             });
 
             it('modal is opened', function () {
-                expect(modalSpy).toHaveBeenCalledWith('show');
+                expect(modalSpy).toHaveBeenCalledWith({backdrop: 'static', keyboard: false});
             });
 
             describe('on close', function () {
@@ -160,12 +139,6 @@ describe('bootstrap.ex', function () {
 
                 it('element is not yet removed', function () {
                     expect(body.html().match(/id="test"/g).length).toEqual(1);
-                });
-
-                it('on hide.bs.modal event, execute onClose handler', function () {
-                    element[0].dispatchEvent(new Event('hide.bs.modal'));
-                    $timeout.flush();
-                    expect(onCloseSpy).toHaveBeenCalled();
                 });
 
                 describe('on hidden.bs.modal event', function () {

@@ -1,8 +1,8 @@
 (function () {
     angular.module('bootstrap.ex', [])
-        .service('binModal', ['$rootScope', '$document', '$compile', '$templateCache', '$timeout', binModalService]);
+        .service('binModal', ['$rootScope', '$document', '$compile', '$templateCache', binModalService]);
 
-    function binModalService($rootScope, $document, $compile, $templateCache, $timeout) {
+    function binModalService($rootScope, $document, $compile, $templateCache) {
         var self = this, scope, element;
 
         self.open = function (args) {
@@ -13,25 +13,13 @@
             $document.find('body').append(element);
 
             if (element.modal) {
-                element.modal('show');
-                element.on('hide.bs.modal', function () {
-                    $timeout(executeOnCloseHandler);
-                });
+                element.modal({backdrop: 'static', keyboard: false});
                 element.on('hidden.bs.modal', removeElement);
             }
 
             self.close = function () {
-                element.modal ? element.modal('hide') : closeModal();
+                element.modal ? element.modal('hide') : removeElement();
             };
-
-            function executeOnCloseHandler() {
-                if (args.onClose) args.onClose();
-            }
-
-            function closeModal() {
-                executeOnCloseHandler();
-                removeElement();
-            }
 
             function removeElement() {
                 if (scope && scope.$destroy) scope.$destroy();
