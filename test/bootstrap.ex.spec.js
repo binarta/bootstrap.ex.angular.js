@@ -7,7 +7,8 @@ describe('bootstrap.ex', function () {
         beforeEach(inject(function ($document, binModal, $templateCache) {
             body = $document.find('body');
             sut = binModal;
-            $templateCache.put('test.html', '<div id="test"></div>')
+            $templateCache.put('test1.html', '<div id="test1"></div>')
+            $templateCache.put('test2.html', '<div id="test2"></div>')
         }));
 
         it('calling close before open does nothing', function () {
@@ -25,10 +26,10 @@ describe('bootstrap.ex', function () {
                     }
                 };
                 sut.open({
-                    templateUrl: 'test.html',
+                    templateUrl: 'test1.html',
                     $ctrl: modalCtrl
                 });
-                element = angular.element(document.getElementById('test'));
+                element = angular.element(document.getElementById('test1'));
                 scope = element.scope();
             });
 
@@ -37,7 +38,7 @@ describe('bootstrap.ex', function () {
             });
 
             it('template is appended to body', function () {
-                expect(body.html()).toContain('id="test"');
+                expect(body.html()).toContain('id="test1"');
             });
 
             it('on execute test spy', function () {
@@ -60,7 +61,7 @@ describe('bootstrap.ex', function () {
                 });
 
                 it('element is removed from body', function () {
-                    expect(body.html()).not.toContain('id="test"');
+                    expect(body.html()).not.toContain('id="test1"');
                 });
 
                 it('scope is destroyed', function () {
@@ -69,33 +70,27 @@ describe('bootstrap.ex', function () {
             });
 
             describe('on open before previous was closed', function () {
-                var isScopeDestroyed;
+                var element2;
 
                 beforeEach(function () {
-                    scope.$on('$destroy', function () {
-                        isScopeDestroyed = true;
-                    });
                     sut.open({
-                        templateUrl: 'test.html',
+                        templateUrl: 'test2.html',
                         $ctrl: {
                             test: function () {
                                 testSpy = true;
                             }
                         }
                     });
-                    element = angular.element(document.getElementById('test'));
+                    element2 = angular.element(document.getElementById('test2'));
                 });
 
                 afterEach(function () {
-                    element.remove();
+                    element2.remove();
                 });
 
-                it('previous element is removed', function () {
-                    expect(body.html().match(/id="test"/g).length).toEqual(1);
-                });
-
-                it('previous scope is destroyed', function () {
-                    expect(isScopeDestroyed).toBeTruthy();
+                it('do nothing', function () {
+                    expect(body.html()).toContain('id="test1"');
+                    expect(body.html()).not.toContain('id="test2"');
                 });
             });
         });
@@ -108,11 +103,11 @@ describe('bootstrap.ex', function () {
                 onCloseSpy = jasmine.createSpy('close');
                 Object.prototype.modal = modalSpy;
                 sut.open({
-                    templateUrl: 'test.html',
+                    templateUrl: 'test1.html',
                     onClose: onCloseSpy,
                     $ctrl: {}
                 });
-                element = angular.element(document.getElementById('test'));
+                element = angular.element(document.getElementById('test1'));
                 scope = element.scope();
             });
 
@@ -121,7 +116,7 @@ describe('bootstrap.ex', function () {
             });
 
             it('element is on body', function () {
-                expect(body.html().match(/id="test"/g).length).toEqual(1);
+                expect(body.html()).toContain('id="test1"');
             });
 
             it('modal is opened', function () {
@@ -138,7 +133,7 @@ describe('bootstrap.ex', function () {
                 });
 
                 it('element is not yet removed', function () {
-                    expect(body.html().match(/id="test"/g).length).toEqual(1);
+                    expect(body.html()).toContain('id="test1"');
                 });
 
                 describe('on hidden.bs.modal event', function () {
@@ -152,11 +147,39 @@ describe('bootstrap.ex', function () {
                     });
 
                     it('element is removed from body', function () {
-                        expect(body.html()).not.toContain('id="test"');
+                        expect(body.html()).not.toContain('id="test1"');
                     });
 
                     it('scope is destroyed', function () {
                         expect(isScopeDestroyed).toBeTruthy();
+                    });
+                });
+
+                describe('when open is called before modal is hidden', function () {
+                    beforeEach(function () {
+                        sut.open({
+                            templateUrl: 'test2.html',
+                            onClose: onCloseSpy,
+                            $ctrl: {}
+                        });
+                    });
+
+                    afterEach(function () {
+                        element.remove();
+                    });
+
+                    it('element is not yet removed', function () {
+                        expect(body.html()).toContain('id="test1"');
+                    });
+
+                    describe('on hidden.bs.modal event', function () {
+                        beforeEach(function () {
+                            element[0].dispatchEvent(new Event('hidden.bs.modal'));
+                        });
+
+                        it('new modal is opened', function () {
+                            expect(body.html()).toContain('id="test2"');
+                        });
                     });
                 });
             });
