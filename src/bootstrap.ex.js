@@ -46,7 +46,7 @@
     }
 
     function BinColsComponent() {
-        this.template = '<div ng-class="$ctrl.clearfixClass"></div><div ng-class="$ctrl.cssClass" ng-transclude></div>';
+        this.template = '<div ng-class="::$ctrl.clearfixClass"></div><div ng-class="::$ctrl.cssClass" ng-transclude></div>';
         this.transclude = true;
         this.bindings = {
             index: '<',
