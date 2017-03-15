@@ -78,13 +78,19 @@
                 }
     
                 function getClearfixClass() {
-                    var visibleXsBlock = xs && i % (12/xs) == 0 ? ' visible-xs-block' : '';
-                    var visibleSmBlock = sm && i % (12/sm) == 0 ? ' visible-sm-block' : '';
-                    var visibleMdBlock = md && i % (12/md) == 0 ? ' visible-md-block' : '';
-                    var visibleLgBlock = lg && i % (12/lg) == 0 ? ' visible-lg-block' : '';
-                    var c = (visibleXsBlock + visibleSmBlock + visibleMdBlock + visibleLgBlock).trim();
-                    if (c != '') c = 'clearfix ' + c;
+                    var clearfix = 'clearfix';
+                    if (i == 0) return clearfix;
+                    var xsClass = xs && i % (12/xs) == 0 ? getName('xs') : '';
+                    var smClass = (sm || xs) && i % (12/(sm || xs)) == 0 ? getName('sm') : '';
+                    var mdClass = (md || sm || xs) && i % (12/(md || sm || xs)) == 0 ? getName('md') : '';
+                    var lgClass = (lg || md || sm || xs) && i % (12/(lg || md || sm || xs)) == 0 ? getName('lg') : '';
+                    var c = (xsClass + smClass + mdClass + lgClass).trim();
+                    if (c != '') c = clearfix + ' ' + c;
                     return c;
+                }
+
+                function getName(id) {
+                    return ' visible-' + id + '-block';
                 }
             };
         };
