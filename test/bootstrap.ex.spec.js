@@ -208,7 +208,7 @@ describe('bootstrap.ex', function () {
             describe('when cols are set to "' + test.actual + '"', function () {
                 beforeEach(function () {
                     $ctrl.cols = test.actual;
-                    $ctrl.$onInit();
+                    $ctrl.$onChanges();
                 });
 
                 it('cssClass is available', function () {
@@ -217,9 +217,18 @@ describe('bootstrap.ex', function () {
             });
         });
 
+        it('do not watch on cols changes', function () {
+            $ctrl.cols = 'xs-12';
+            $ctrl.$onChanges();
+            expect($ctrl.cssClass).toEqual('col-xs-12');
+            $ctrl.cols = 'xs-6';
+            $ctrl.$onChanges();
+            expect($ctrl.cssClass).toEqual('col-xs-12');
+        });
+
         describe('with cols set to "xs-6"', function () {
             beforeEach(function () {
-                $ctrl.cols = 'xs-6'
+                $ctrl.cols = 'xs-6';
             });
 
             [
@@ -238,7 +247,7 @@ describe('bootstrap.ex', function () {
                 describe('and index is: ' + test.index, function () {
                     beforeEach(function () {
                         $ctrl.index = test.index;
-                        $ctrl.$onInit();
+                        $ctrl.$onChanges();
                     });
 
                     it('clearfixClass is available', function () {
@@ -250,7 +259,7 @@ describe('bootstrap.ex', function () {
 
         describe('with cols set to "sm-4"', function () {
             beforeEach(function () {
-                $ctrl.cols = 'sm-4'
+                $ctrl.cols = 'sm-4';
             });
 
             [
@@ -269,7 +278,7 @@ describe('bootstrap.ex', function () {
                 describe('and index is: ' + test.index, function () {
                     beforeEach(function () {
                         $ctrl.index = test.index;
-                        $ctrl.$onInit();
+                        $ctrl.$onChanges();
                     });
 
                     it('clearfixClass is available', function () {
@@ -281,7 +290,7 @@ describe('bootstrap.ex', function () {
 
         describe('with cols set to "lg-3"', function () {
             beforeEach(function () {
-                $ctrl.cols = 'lg-3'
+                $ctrl.cols = 'lg-3';
             });
 
             [
@@ -300,7 +309,7 @@ describe('bootstrap.ex', function () {
                 describe('and index is: ' + test.index, function () {
                     beforeEach(function () {
                         $ctrl.index = test.index;
-                        $ctrl.$onInit();
+                        $ctrl.$onChanges();
                     });
 
                     it('clearfixClass is available', function () {
@@ -312,7 +321,7 @@ describe('bootstrap.ex', function () {
 
         describe('with cols set to "xs-6 sm-4"', function () {
             beforeEach(function () {
-                $ctrl.cols = 'xs-6 sm-4'
+                $ctrl.cols = 'xs-6 sm-4';
             });
 
             [
@@ -331,7 +340,7 @@ describe('bootstrap.ex', function () {
                 describe('and index is: ' + test.index, function () {
                     beforeEach(function () {
                         $ctrl.index = test.index;
-                        $ctrl.$onInit();
+                        $ctrl.$onChanges();
                     });
 
                     it('clearfixClass is available', function () {
@@ -343,7 +352,7 @@ describe('bootstrap.ex', function () {
 
         describe('with cols set to "xs-6 lg-4"', function () {
             beforeEach(function () {
-                $ctrl.cols = 'xs-6 lg-4'
+                $ctrl.cols = 'xs-6 lg-4';
             });
 
             [
@@ -362,7 +371,7 @@ describe('bootstrap.ex', function () {
                 describe('and index is: ' + test.index, function () {
                     beforeEach(function () {
                         $ctrl.index = test.index;
-                        $ctrl.$onInit();
+                        $ctrl.$onChanges();
                     });
 
                     it('clearfixClass is available', function () {
@@ -374,7 +383,7 @@ describe('bootstrap.ex', function () {
 
         describe('with cols set to "md-4 lg-3"', function () {
             beforeEach(function () {
-                $ctrl.cols = 'md-4 lg-3'
+                $ctrl.cols = 'md-4 lg-3';
             });
 
             [
@@ -393,7 +402,7 @@ describe('bootstrap.ex', function () {
                 describe('and index is: ' + test.index, function () {
                     beforeEach(function () {
                         $ctrl.index = test.index;
-                        $ctrl.$onInit();
+                        $ctrl.$onChanges();
                     });
 
                     it('clearfixClass is available', function () {
@@ -405,7 +414,7 @@ describe('bootstrap.ex', function () {
 
         describe('with cols set to "xs-12 sm-6 md-4 lg-3"', function () {
             beforeEach(function () {
-               $ctrl.cols = 'xs-12 sm-6 md-4 lg-3'
+                $ctrl.cols = 'xs-12 sm-6 md-4 lg-3';
             });
 
             [
@@ -424,7 +433,7 @@ describe('bootstrap.ex', function () {
                 describe('and index is: ' + test.index, function () {
                     beforeEach(function () {
                         $ctrl.index = test.index;
-                        $ctrl.$onInit();
+                        $ctrl.$onChanges();
                     });
 
                     it('clearfixClass is available', function () {
