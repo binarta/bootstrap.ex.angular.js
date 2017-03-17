@@ -46,17 +46,19 @@
     }
 
     function BinColsComponent() {
-        this.template = '<div ng-class="$ctrl.clearfixClass"></div><div ng-class="::$ctrl.cssClass" ng-transclude></div>';
+        this.template = '<div ng-class="$ctrl.clearfixClass"></div><div ng-class="$ctrl.cssClass" ng-transclude></div>';
         this.transclude = true;
         this.bindings = {
             index: '<',
-            cols: '@'
+            length: '<',
+            cols: '@',
+            center: '@'
         };
         this.controller = function () {
             var $ctrl = this, xs, sm, md, lg;
 
             $ctrl.$onChanges = function () {
-                if ($ctrl.cols != undefined && !$ctrl.cssClass) $ctrl.cssClass = getCssClass();
+                if ($ctrl.cols != undefined) $ctrl.cssClass = getCssClass();
                 if ($ctrl.index != undefined) $ctrl.clearfixClass = getClearfixClass();
             };
 
@@ -80,7 +82,49 @@
                 if (sm) c += ' col-sm-' + sm;
                 if (md) c += ' col-md-' + md;
                 if (lg) c += ' col-lg-' + lg;
-                return c.trim();
+                c = c.trim();
+                if ($ctrl.center == 'true' && $ctrl.length > 0) c += getOffsetClass();
+                return c;
+            }
+
+            function getOffsetClass() {
+                var c = '';
+                [
+                    {name: 'xs', size: xs},
+                    {name: 'sm', size: sm},
+                    {name: 'md', size: md},
+                    {name: 'lg', size: lg}
+                ].forEach(function (it) {
+                    if (isFirstItemOnLastRow(it.size)) {
+                        var offset = ((12 - (itemsOnLastRow(it.size) * it.size))/2);
+                        if (offset > 0 && isInteger(offset)) c += ' col-' + it.name + '-offset-' + offset;
+                    }
+                });
+                return c;
+
+                function isFirstItemOnLastRow(size) {
+                    var remainder = remainderLength(size);
+                    if (remainder > 0 && $ctrl.index == ($ctrl.length - remainder)) return true;
+                    if (remainder == 0 && $ctrl.index == ($ctrl.length - maxItemsOnRow(size))) return true;
+                    return false;
+                }
+
+                function itemsOnLastRow(size) {
+                    var remainder = remainderLength(size);
+                    return remainder > 0 ? remainder : maxItemsOnRow(size);
+                }
+
+                function remainderLength(size) {
+                    return $ctrl.length % maxItemsOnRow(size);
+                }
+
+                function maxItemsOnRow(size) {
+                    return Math.floor(12/size);
+                }
+
+                function isInteger(value) {
+                    return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
+                }
             }
 
             function getClearfixClass() {
