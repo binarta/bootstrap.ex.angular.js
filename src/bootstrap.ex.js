@@ -83,12 +83,13 @@
                 if (md) c += ' col-md-' + md;
                 if (lg) c += ' col-lg-' + lg;
                 c = c.trim();
-                if ($ctrl.center == 'true' && $ctrl.length > 0) c += getOffsetClass();
+                if ($ctrl.center == 'true' && $ctrl.length > 0) c += getOffsetClasses();
                 return c;
             }
 
-            function getOffsetClass() {
+            function getOffsetClasses() {
                 var c = '';
+                var previous = {};
                 [
                     {name: 'xs', size: xs},
                     {name: 'sm', size: sm},
@@ -96,11 +97,32 @@
                     {name: 'lg', size: lg}
                 ].forEach(function (it) {
                     if (isFirstItemOnLastRow(it.size)) {
-                        var offset = ((12 - (itemsOnLastRow(it.size) * it.size))/2);
-                        if (offset > 0 && isInteger(offset)) c += ' col-' + it.name + '-offset-' + offset;
+                        var offset = getEmptyItemSlotsOnLastRow(it.size)/2;
+                        if (offset > 0) {
+                            it.offset = offset;
+                            c += getOffsetClass(it.name, formatOffset(offset));
+                        }
                     }
+                    if (isOffsetResetNeeded(it, previous)) c += getOffsetClass(it.name, 0);
+                    previous = it;
                 });
                 return c;
+
+                function formatOffset(offset) {
+                    return offset.toString().replace('.', '-');
+                }
+
+                function isOffsetResetNeeded(current, previous) {
+                    return current.size && !current.offset && previous.offset;
+                }
+
+                function getOffsetClass(name, offset) {
+                    return ' col-' + name + '-offset-' + offset;
+                }
+
+                function getEmptyItemSlotsOnLastRow(size) {
+                    return 12 - (itemsOnLastRow(size) * size);
+                }
 
                 function isFirstItemOnLastRow(size) {
                     var remainder = remainderLength(size);
