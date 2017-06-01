@@ -77,12 +77,10 @@
 
             function getCssClass() {
                 getResponsiveValues();
-                var c = '';
-                if (xs) c += ' col-xs-' + xs;
+                var c = 'col-xs-' + (xs || 12);
                 if (sm) c += ' col-sm-' + sm;
                 if (md) c += ' col-md-' + md;
                 if (lg) c += ' col-lg-' + lg;
-                c = c.trim();
                 if ($ctrl.center === 'true' && $ctrl.length > 0) c += getOffsetClasses();
                 return c;
             }

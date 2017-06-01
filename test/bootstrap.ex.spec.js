@@ -194,9 +194,9 @@ describe('bootstrap.ex', function () {
         }));
 
         [
-            {actual: '', expected: ''},
+            {actual: '', expected: 'col-xs-12'},
             {actual: 'xs-12', expected: 'col-xs-12'},
-            {actual: 'lg-3', expected: 'col-lg-3'},
+            {actual: 'lg-3', expected: 'col-xs-12 col-lg-3'},
             {actual: 'xs-12 sm-6', expected: 'col-xs-12 col-sm-6'},
             {actual: 'xs-12 sm-6 md-4', expected: 'col-xs-12 col-sm-6 col-md-4'},
             {actual: 'xs-12 sm-6 md-4 lg-3', expected: 'col-xs-12 col-sm-6 col-md-4 col-lg-3'},
@@ -504,11 +504,11 @@ describe('bootstrap.ex', function () {
                         },
                         {
                             actual: 'sm-4 md-3',
-                            expected: 'col-sm-4 col-md-3 col-sm-offset-4 col-md-offset-4-5'
+                            expected: 'col-xs-12 col-sm-4 col-md-3 col-sm-offset-4 col-md-offset-4-5'
                         },
                         {
                             actual: 'sm-4',
-                            expected: 'col-sm-4 col-sm-offset-4'
+                            expected: 'col-xs-12 col-sm-4 col-sm-offset-4'
                         }
                     ].forEach(function (test) {
                         describe('when cols are set to "' + test.actual + '"', function () {
@@ -680,7 +680,7 @@ describe('bootstrap.ex', function () {
                     [
                         {
                             actual: 'sm-4 md-3',
-                            expected: 'col-sm-4 col-md-3 col-sm-offset-2 col-md-offset-0'
+                            expected: 'col-xs-12 col-sm-4 col-md-3 col-sm-offset-2 col-md-offset-0'
                         }
                     ].forEach(function (test) {
                         describe('when cols are set to "' + test.actual + '"', function () {
