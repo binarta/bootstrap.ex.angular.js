@@ -58,16 +58,16 @@
             var $ctrl = this, xs, sm, md, lg;
 
             $ctrl.$onChanges = function () {
-                if ($ctrl.cols != undefined) $ctrl.cssClass = getCssClass();
-                if ($ctrl.index != undefined) $ctrl.clearfixClass = getClearfixClass();
+                if ($ctrl.cols !== undefined) $ctrl.cssClass = getCssClass();
+                if ($ctrl.index !== undefined) $ctrl.clearfixClass = getClearfixClass();
             };
 
             function getResponsiveValues() {
                 angular.forEach($ctrl.cols.split(' '), function (v) {
-                    if (v.indexOf('xs') != -1) xs = extractInt(v);
-                    if (v.indexOf('sm') != -1) sm = extractInt(v);
-                    if (v.indexOf('md') != -1) md = extractInt(v);
-                    if (v.indexOf('lg') != -1) lg = extractInt(v);
+                    if (v.indexOf('xs') !== -1) xs = extractInt(v);
+                    if (v.indexOf('sm') !== -1) sm = extractInt(v);
+                    if (v.indexOf('md') !== -1) md = extractInt(v);
+                    if (v.indexOf('lg') !== -1) lg = extractInt(v);
                 });
             }
 
@@ -83,7 +83,7 @@
                 if (md) c += ' col-md-' + md;
                 if (lg) c += ' col-lg-' + lg;
                 c = c.trim();
-                if ($ctrl.center == 'true' && $ctrl.length > 0) c += getOffsetClasses();
+                if ($ctrl.center === 'true' && $ctrl.length > 0) c += getOffsetClasses();
                 return c;
             }
 
@@ -126,9 +126,8 @@
 
                 function isFirstItemOnLastRow(size) {
                     var remainder = remainderLength(size);
-                    if (remainder > 0 && $ctrl.index == ($ctrl.length - remainder)) return true;
-                    if (remainder == 0 && $ctrl.index == ($ctrl.length - maxItemsOnRow(size))) return true;
-                    return false;
+                    if (remainder > 0 && $ctrl.index === ($ctrl.length - remainder)) return true;
+                    return remainder === 0 && $ctrl.index === ($ctrl.length - maxItemsOnRow(size));
                 }
 
                 function itemsOnLastRow(size) {
@@ -143,22 +142,18 @@
                 function maxItemsOnRow(size) {
                     return Math.floor(12/size);
                 }
-
-                function isInteger(value) {
-                    return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
-                }
             }
 
             function getClearfixClass() {
                 var i = $ctrl.index;
                 var clearfix = 'clearfix';
-                if (i == 0) return clearfix;
-                var xsClass = xs && i % (12/xs) == 0 ? getName('xs') : '';
-                var smClass = (sm || xs) && i % (12/(sm || xs)) == 0 ? getName('sm') : '';
-                var mdClass = (md || sm || xs) && i % (12/(md || sm || xs)) == 0 ? getName('md') : '';
-                var lgClass = (lg || md || sm || xs) && i % (12/(lg || md || sm || xs)) == 0 ? getName('lg') : '';
+                if (i === 0) return clearfix;
+                var xsClass = xs && i % (12/xs) === 0 ? getName('xs') : '';
+                var smClass = (sm || xs) && i % (12/(sm || xs)) === 0 ? getName('sm') : '';
+                var mdClass = (md || sm || xs) && i % (12/(md || sm || xs)) === 0 ? getName('md') : '';
+                var lgClass = (lg || md || sm || xs) && i % (12/(lg || md || sm || xs)) === 0 ? getName('lg') : '';
                 var c = (xsClass + smClass + mdClass + lgClass).trim();
-                if (c != '') c = clearfix + ' ' + c;
+                if (c !== '') c = clearfix + ' ' + c;
                 return c;
             }
 
