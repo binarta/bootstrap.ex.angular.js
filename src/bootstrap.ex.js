@@ -86,16 +86,19 @@
             }
 
             function getOffsetClasses() {
-                var c = '';
-                var previous = {};
+                var c = '',
+                    previous = {},
+                    maxSlotsOnRow;
+
                 [
                     {name: 'xs', size: xs},
                     {name: 'sm', size: sm},
                     {name: 'md', size: md},
                     {name: 'lg', size: lg}
                 ].forEach(function (it) {
-                    if (isFirstItemOnLastRow(it.size)) {
-                        var offset = getEmptyItemSlotsOnLastRow(it.size)/2;
+                    maxSlotsOnRow = getMaxSlotsOnRow(it.size);
+                    if (isFirstItemOnRow()) {
+                        var offset = getEmptySlotsOnRow(it.size)/2;
                         if (offset > 0) {
                             it.offset = offset;
                             c += getOffsetClass(it.name, formatOffset(offset));
@@ -105,6 +108,10 @@
                     previous = it;
                 });
                 return c;
+
+                function getMaxSlotsOnRow(size) {
+                    return Math.floor(12/size);
+                }
 
                 function formatOffset(offset) {
                     return offset.toString().replace('.', '-');
@@ -118,27 +125,16 @@
                     return ' col-' + name + '-offset-' + offset;
                 }
 
-                function getEmptyItemSlotsOnLastRow(size) {
-                    return 12 - (itemsOnLastRow(size) * size);
+                function isFirstItemOnRow() {
+                    return $ctrl.index % maxSlotsOnRow === 0;
                 }
 
-                function isFirstItemOnLastRow(size) {
-                    var remainder = remainderLength(size);
-                    if (remainder > 0 && $ctrl.index === ($ctrl.length - remainder)) return true;
-                    return remainder === 0 && $ctrl.index === ($ctrl.length - maxItemsOnRow(size));
+                function getEmptySlotsOnRow(size) {
+                    return 12 - (itemsOnRow() * size);
                 }
 
-                function itemsOnLastRow(size) {
-                    var remainder = remainderLength(size);
-                    return remainder > 0 ? remainder : maxItemsOnRow(size);
-                }
-
-                function remainderLength(size) {
-                    return $ctrl.length % maxItemsOnRow(size);
-                }
-
-                function maxItemsOnRow(size) {
-                    return Math.floor(12/size);
+                function itemsOnRow() {
+                    return (($ctrl.index + maxSlotsOnRow) <= $ctrl.length) ? maxSlotsOnRow : $ctrl.length - $ctrl.index;
                 }
             }
 

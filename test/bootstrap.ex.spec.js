@@ -7,8 +7,8 @@ describe('bootstrap.ex', function () {
         beforeEach(inject(function ($document, binModal, $templateCache) {
             body = $document.find('body');
             sut = binModal;
-            $templateCache.put('test1.html', '<div id="test1"></div>')
-            $templateCache.put('test2.html', '<div id="test2"></div>')
+            $templateCache.put('test1.html', '<div id="test1"></div>');
+            $templateCache.put('test2.html', '<div id="test2"></div>');
         }));
 
         it('calling close before open does nothing', function () {
@@ -542,23 +542,23 @@ describe('bootstrap.ex', function () {
                         },
                         {
                             actual: 'xs-11 sm-11 md-11 lg-11',
-                            expected: 'col-xs-11 col-sm-11 col-md-11 col-lg-11'
+                            expected: 'col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-0-5 col-sm-offset-0-5 col-md-offset-0-5 col-lg-offset-0-5'
                         },
                         {
                             actual: 'xs-10 sm-10 md-10 lg-10',
-                            expected: 'col-xs-10 col-sm-10 col-md-10 col-lg-10'
+                            expected: 'col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1'
                         },
                         {
                             actual: 'xs-9 sm-9 md-9 lg-9',
-                            expected: 'col-xs-9 col-sm-9 col-md-9 col-lg-9'
+                            expected: 'col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-1-5 col-sm-offset-1-5 col-md-offset-1-5 col-lg-offset-1-5'
                         },
                         {
                             actual: 'xs-8 sm-8 md-8 lg-8',
-                            expected: 'col-xs-8 col-sm-8 col-md-8 col-lg-8'
+                            expected: 'col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2'
                         },
                         {
                             actual: 'xs-7 sm-7 md-7 lg-7',
-                            expected: 'col-xs-7 col-sm-7 col-md-7 col-lg-7'
+                            expected: 'col-xs-7 col-sm-7 col-md-7 col-lg-7 col-xs-offset-2-5 col-sm-offset-2-5 col-md-offset-2-5 col-lg-offset-2-5'
                         },
                         {
                             actual: 'xs-6 sm-6 md-6 lg-6',
@@ -670,6 +670,74 @@ describe('bootstrap.ex', function () {
             describe('when length is 8', function () {
                 beforeEach(function () {
                     $ctrl.length = 8;
+                });
+
+                describe('first item', function () {
+                    beforeEach(function () {
+                        $ctrl.index = 0;
+                    });
+
+                    [
+                        {
+                            actual: 'xs-12 sm-12 md-12 lg-12',
+                            expected: 'col-xs-12 col-sm-12 col-md-12 col-lg-12'
+                        },
+                        {
+                            actual: 'xs-11 sm-11 md-11 lg-11',
+                            expected: 'col-xs-11 col-sm-11 col-md-11 col-lg-11 col-xs-offset-0-5 col-sm-offset-0-5 col-md-offset-0-5 col-lg-offset-0-5'
+                        },
+                        {
+                            actual: 'xs-10 sm-10 md-10 lg-10',
+                            expected: 'col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1'
+                        },
+                        {
+                            actual: 'xs-9 sm-9 md-9 lg-9',
+                            expected: 'col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xs-offset-1-5 col-sm-offset-1-5 col-md-offset-1-5 col-lg-offset-1-5'
+                        },
+                        {
+                            actual: 'xs-8 sm-8 md-8 lg-8',
+                            expected: 'col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2'
+                        },
+                        {
+                            actual: 'xs-7 sm-7 md-7 lg-7',
+                            expected: 'col-xs-7 col-sm-7 col-md-7 col-lg-7 col-xs-offset-2-5 col-sm-offset-2-5 col-md-offset-2-5 col-lg-offset-2-5'
+                        },
+                        {
+                            actual: 'xs-6 sm-6 md-6 lg-6',
+                            expected: 'col-xs-6 col-sm-6 col-md-6 col-lg-6'
+                        },
+                        {
+                            actual: 'xs-5 sm-5 md-5 lg-5',
+                            expected: 'col-xs-5 col-sm-5 col-md-5 col-lg-5 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1'
+                        },
+                        {
+                            actual: 'xs-4 sm-4 md-4 lg-4',
+                            expected: 'col-xs-4 col-sm-4 col-md-4 col-lg-4'
+                        },
+                        {
+                            actual: 'xs-3 sm-3 md-3 lg-3',
+                            expected: 'col-xs-3 col-sm-3 col-md-3 col-lg-3'
+                        },
+                        {
+                            actual: 'xs-2 sm-2 md-2 lg-2',
+                            expected: 'col-xs-2 col-sm-2 col-md-2 col-lg-2'
+                        },
+                        {
+                            actual: 'xs-1 sm-1 md-1 lg-1',
+                            expected: 'col-xs-1 col-sm-1 col-md-1 col-lg-1 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2'
+                        }
+                    ].forEach(function (test) {
+                        describe('when cols are set to "' + test.actual + '"', function () {
+                            beforeEach(function () {
+                                $ctrl.cols = test.actual;
+                                $ctrl.$onChanges();
+                            });
+
+                            it('cssClass is available', function () {
+                                expect($ctrl.cssClass).toEqual(test.expected);
+                            });
+                        });
+                    });
                 });
 
                 describe('and second last item', function () {
